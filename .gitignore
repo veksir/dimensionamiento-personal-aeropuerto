@@ -1,0 +1,31 @@
+# ---- Artefactos de build de PyInstaller ----
+build/
+dist/
+*.spec
+*.exe
+*.rar
+*.zip
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- Resultados generados por la app ----
+Resultados/
+personal_requerido.xlsx
+dashboard_dimensionamiento.html
+
+# ---- Archivos de datos de entrada (itinerarios / mallas) ----
+*.xlsx
+*.xls
+*.csv
+
+# ---- Sistema operativo / editores ----
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
