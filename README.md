@@ -11,6 +11,18 @@ El resultado se entrega en dos formatos:
    que se abre con doble clic en cualquier navegador (mapas de calor, Gantt,
    programación de turnos, exportación a CSV e impresión).
 
+![Dashboard de dimensionamiento con datos de demostración](docs/dashboard_demo.png)
+
+*Dashboard generado con una red ficticia de 55 estaciones.*
+
+## Contexto de uso
+
+Esta herramienta nació de una necesidad real en una operación aeroportuaria. La planificación de turnos de check-in y gate se hacía a partir de la malla de itinerario en Excel, calculando a mano cuánto personal necesitaba cada estación cada día, un proceso que podía tomar varias semanas.
+
+La herramienta automatiza ese cálculo. Se ha probado con los itinerarios de septiembre y octubre sobre una red de 55 estaciones, y el resultado se genera en pocos segundos. Quien la usa no tiene perfil técnico, por eso se distribuye como un ejecutable de Windows que no requiere instalar Python ni ninguna dependencia: se arrastra el Excel y se obtiene el resultado en una carpeta "Resultados".
+
+Los datos de la operación real no se incluyen en este repositorio. Las imágenes y ejemplos usan itinerarios ficticios.
+
 ## ¿Cómo funciona?
 
 1. Se carga la malla de itinerario (`.xlsx` / `.xls`) con las columnas:
