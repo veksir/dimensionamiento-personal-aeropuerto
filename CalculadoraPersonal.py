@@ -638,7 +638,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dimensionamiento Operativo de Personal — Aeropuertos</title>
+<title>Dimensionamiento de personal: check-in y gate</title>
 <style>
   :root {{
     --bg: #f1f5f9;
@@ -649,7 +649,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     --ink-soft: #334155;
     --muted: #64748b;
     --line: #e2e8f0;
-    --navy: #0b192c;
+    --navy: #14233a;
     --blue: #2563eb;
     --blue-soft: rgba(37, 99, 235, 0.1);
     --cyan: #0d9488;
@@ -658,9 +658,9 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     --danger: #dc2626;
     --danger-soft: rgba(220, 38, 38, 0.1);
     --success: #059669;
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-    --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.07);
-    --radius: 16px;
+    --shadow-sm: none;
+    --shadow: none;
+    --radius: 8px;
   }}
 
   [data-theme="dark"] {{
@@ -681,8 +681,8 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     --danger: #f87171;
     --danger-soft: rgba(248, 113, 113, 0.15);
     --success: #34d399;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.45);
+    --shadow-sm: none;
+    --shadow: none;
   }}
 
   * {{ box-sizing: border-box; }}
@@ -696,21 +696,9 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   }}
 
   header {{
-    background: linear-gradient(135deg, #091526 0%, #102542 60%, #17365d 100%);
+    background: var(--navy);
     color: #fff;
-    padding: 28px clamp(20px, 4vw, 64px) 92px;
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }}
-  header::before {{
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.22), transparent 35%),
-      radial-gradient(circle at 15% 80%, rgba(37, 99, 235, 0.25), transparent 40%);
-    pointer-events: none;
+    padding: 26px clamp(20px, 4vw, 64px) 30px;
   }}
   .header-inner {{
     max-width: 1380px;
@@ -724,31 +712,22 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     flex-wrap: wrap;
   }}
   .brand-badge {{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #93c5fd;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #9fb3cc;
   }}
   header h1 {{
     margin: 12px 0 6px;
-    font-size: clamp(24px, 2.8vw, 36px);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    font-size: clamp(22px, 2.4vw, 30px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
   }}
   header p {{
     margin: 0;
-    color: #cbd5e1;
-    font-size: 13.5px;
+    color: #b8c4d4;
+    font-size: 13px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -760,11 +739,11 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     gap: 10px;
   }}
   .btn-theme {{
-    background: rgba(255, 255, 255, 0.1);
+    background: transparent;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 10px;
-    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px 14px;
     font: inherit;
     font-size: 12.5px;
     font-weight: 600;
@@ -774,11 +753,11 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     gap: 7px;
     transition: 0.2s;
   }}
-  .btn-theme:hover {{ background: rgba(255, 255, 255, 0.2); }}
+  .btn-theme:hover {{ background: rgba(255, 255, 255, 0.1); }}
 
   .kpis {{
     max-width: 1380px;
-    margin: -58px auto 24px;
+    margin: 24px auto 24px;
     padding: 0 24px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -790,40 +769,23 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    padding: 18px 22px;
+    display: block;
   }}
   .kpi-card .valor {{
-    font-size: 32px;
-    line-height: 1.05;
-    font-weight: 800;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 700;
     color: var(--ink);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
   }}
   .kpi-card .etiqueta {{
-    margin-top: 6px;
-    font-size: 11px;
-    font-weight: 700;
+    margin-top: 4px;
+    font-size: 12.5px;
+    font-weight: 500;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
   }}
-  .kpi-icon {{
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }}
-  .kpi-icon.blue {{ background: var(--blue-soft); color: var(--blue); }}
-  .kpi-icon.orange {{ background: var(--orange-soft); color: var(--orange); }}
-  .kpi-icon.cyan {{ background: rgba(13, 148, 136, 0.12); color: var(--cyan); }}
 
   .nav-tabs-wrap {{
     max-width: 1380px;
@@ -834,10 +796,9 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     display: inline-flex;
     background: var(--surface);
     border: 1px solid var(--line);
-    padding: 5px;
-    border-radius: 12px;
-    gap: 4px;
-    box-shadow: var(--shadow-sm);
+    padding: 4px;
+    border-radius: 8px;
+    gap: 2px;
     flex-wrap: wrap;
   }}
   .nav-tab {{
@@ -853,7 +814,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     transition: 0.15s;
   }}
   .nav-tab:hover {{ color: var(--ink); background: var(--surface-2); }}
-  .nav-tab.activo {{ background: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25); }}
+  .nav-tab.activo {{ background: var(--blue); color: #fff; }}
 
   section {{
     max-width: 1380px;
@@ -883,17 +844,10 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     align-items: center;
     gap: 10px;
     margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--ink);
-  }}
-  .panel-title::before {{
-    content: '';
-    width: 4px;
-    height: 20px;
-    border-radius: 99px;
-    background: linear-gradient(180deg, var(--blue), var(--cyan));
   }}
   .notas {{
     color: var(--muted);
@@ -910,7 +864,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     flex-wrap: wrap;
     padding: 14px 16px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 8px;
     background: var(--surface-2);
     margin-bottom: 20px;
   }}
@@ -928,19 +882,19 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     background: var(--surface);
     padding: 9px 13px;
     border: 1px solid var(--line);
-    border-radius: 9px;
+    border-radius: 6px;
     outline: none;
     transition: 0.15s;
   }}
   select#selectorEstacion {{ min-width: 180px; cursor: pointer; }}
   select#selectorEstacion:focus, input#inputFecha:focus, .input-busqueda:focus {{
     border-color: var(--blue);
-    box-shadow: 0 0 0 3px var(--blue-soft);
+    box-shadow: 0 0 0 2px var(--blue-soft);
   }}
   .toggle-modo {{
     display: inline-flex;
     border: 1px solid var(--line);
-    border-radius: 9px;
+    border-radius: 6px;
     overflow: hidden;
     background: var(--surface);
   }}
@@ -965,7 +919,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     font-size: 12.5px;
     font-weight: 600;
     padding: 9px 13px;
-    border-radius: 9px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--surface);
     color: var(--ink);
@@ -981,12 +935,11 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     background: var(--surface-hover);
   }}
   .btn-accion.pico {{
-    background: var(--orange-soft);
-    color: var(--orange);
-    border-color: rgba(217, 119, 6, 0.3);
+    border-color: var(--blue);
+    color: var(--blue);
   }}
   .btn-accion.pico:hover {{
-    background: var(--orange);
+    background: var(--blue);
     color: #fff;
   }}
   .dia-semana-pill {{
@@ -1006,7 +959,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   }}
   .kpis-estacion .kpi-card {{
     padding: 15px 18px;
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: none;
     background: var(--surface-2);
     display: block;
@@ -1017,7 +970,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     max-height: 440px;
     overflow: auto;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 8px;
     background: var(--surface);
   }}
   table.resumen, table.tabla-turnos, table.semana, table.consolidado {{
@@ -1030,11 +983,9 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     background: var(--surface-2);
     color: var(--muted);
     text-align: left;
-    font-size: 10.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 12px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 11px 14px;
     border-bottom: 1px solid var(--line);
     position: sticky;
     top: 0;
@@ -1159,14 +1110,14 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     color: var(--muted);
     font-style: italic;
     background: var(--surface-2);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px dashed var(--line);
   }}
 
   .gantt-card {{
     background: var(--surface-2);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 16px 18px;
     margin: 16px 0 22px;
   }}
@@ -1256,9 +1207,9 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   }}
   .gantt-barra:hover {{ filter: brightness(1.1); z-index: 5; }}
   .barra-vuelo-checkin {{ background: #60a5fa; color: #0f172a; }}
-  .barra-turno-checkin {{ background: #1d4ed8; height: 14px; top: 4px; box-shadow: 0 2px 4px rgba(29,78,216,0.25); }}
+  .barra-turno-checkin {{ background: #1d4ed8; height: 14px; top: 4px; }}
   .barra-vuelo-gate {{ background: #fbbf24; color: #0f172a; }}
-  .barra-turno-gate {{ background: #b45309; height: 14px; top: 4px; box-shadow: 0 2px 4px rgba(180,83,9,0.25); }}
+  .barra-turno-gate {{ background: #b45309; height: 14px; top: 4px; }}
 
   .gantt-tooltip {{
     position: fixed;
@@ -1270,7 +1221,6 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
     border-radius: 8px;
     pointer-events: none;
     z-index: 999;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
     border: 1px solid rgba(255,255,255,0.12);
     white-space: nowrap;
   }}
@@ -1307,16 +1257,16 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
 <header>
   <div class="header-inner">
     <div>
-      <span class="brand-badge">● Planificación Operativa Aeroportuaria</span>
-      <h1>Dimensionamiento de Personal — Check-in &amp; Gate</h1>
+      <span class="brand-badge">Planificación operativa aeroportuaria</span>
+      <h1>Dimensionamiento de personal: check-in y gate</h1>
       <p>
-        <span>📅 Periodo analizado: <b>{kpi_fecha_min:%d-%b-%Y}</b> a <b>{kpi_fecha_max:%d-%b-%Y}</b></span>
-        <span>•</span>
-        <span>⏱️ Turnos de 8h (buffer de 15 min incluido)</span>
+        <span>Periodo analizado: <b>{kpi_fecha_min:%d-%b-%Y}</b> a <b>{kpi_fecha_max:%d-%b-%Y}</b></span>
+        <span>·</span>
+        <span>Turnos de 8 h, con 15 min de holgura entre tareas</span>
       </p>
     </div>
     <div class="header-actions">
-      <button class="btn-theme" onclick="alternarTema()" id="btnTema">🌙 Modo Oscuro</button>
+      <button class="btn-theme" onclick="alternarTema()" id="btnTema">Modo oscuro</button>
     </div>
   </div>
 </header>
@@ -1325,38 +1275,29 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   <div class="kpi-card">
     <div>
       <div class="valor">{kpi_headcount_prom}</div>
-      <div class="etiqueta">Headcount Promedio / Día (Red)</div>
-    </div>
-    <div class="kpi-icon blue">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <div class="etiqueta">Personal promedio por día (toda la red)</div>
     </div>
   </div>
   <div class="kpi-card">
     <div>
       <div class="valor">{kpi_headcount_pico}</div>
-      <div class="etiqueta">Headcount Pico (Día Más Crítico)</div>
-    </div>
-    <div class="kpi-icon orange">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <div class="etiqueta">Personal en el día más exigente</div>
     </div>
   </div>
   <div class="kpi-card">
     <div>
       <div class="valor">{kpi_num_estaciones}</div>
-      <div class="etiqueta">Estaciones Analizadas</div>
-    </div>
-    <div class="kpi-icon cyan">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+      <div class="etiqueta">Estaciones analizadas</div>
     </div>
   </div>
 </div>
 
 <div class="nav-tabs-wrap">
   <div class="nav-tabs">
-    <button class="nav-tab activo" onclick="cambiarSeccion('todo', this)">Vista Completa</button>
-    <button class="nav-tab" onclick="cambiarSeccion('operacion', this)">Programación de Turnos &amp; Gantt</button>
-    <button class="nav-tab" onclick="cambiarSeccion('analitica', this)">Mapas de Calor &amp; Curva Diaria</button>
-    <button class="nav-tab" onclick="cambiarSeccion('resumen', this)">Resumen Consolidado de Red</button>
+    <button class="nav-tab activo" onclick="cambiarSeccion('todo', this)">Vista completa</button>
+    <button class="nav-tab" onclick="cambiarSeccion('operacion', this)">Programación de turnos y Gantt</button>
+    <button class="nav-tab" onclick="cambiarSeccion('analitica', this)">Mapas de calor y curva diaria</button>
+    <button class="nav-tab" onclick="cambiarSeccion('resumen', this)">Resumen de la red</button>
   </div>
 </div>
 
@@ -1364,7 +1305,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   <!-- PANEL 1: PROGRAMACION DE TURNOS POR FECHA -->
   <div class="panel" id="panelCalendario">
     <div class="panel-header">
-      <h2 class="panel-title">Programación de Turnos y Cobertura por Fecha</h2>
+      <h2 class="panel-title">Programación de turnos y cobertura por fecha</h2>
       <span id="etiquetaDiaSemana" class="dia-semana-pill"></span>
     </div>
     <p class="notas">
@@ -1385,15 +1326,15 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
       </div>
 
       <div class="controles-grupo">
-        <button class="btn-accion" onclick="desplazarFecha(-1)" title="Día anterior">◀ Ant.</button>
+        <button class="btn-accion" onclick="desplazarFecha(-1)" title="Día anterior">Anterior</button>
         <input type="date" id="inputFecha" onchange="actualizarVistaFecha()">
-        <button class="btn-accion" onclick="desplazarFecha(1)" title="Día siguiente">Sig. ▶</button>
-        <button class="btn-accion pico" onclick="irADiaCritico()" title="Saltar al día de mayor demanda de esta estación">🔥 Día Pico</button>
+        <button class="btn-accion" onclick="desplazarFecha(1)" title="Día siguiente">Siguiente</button>
+        <button class="btn-accion pico" onclick="irADiaCritico()" title="Saltar al día de mayor demanda de esta estación">Día pico</button>
       </div>
 
       <div class="controles-grupo">
-        <button class="btn-accion" onclick="descargarCSV()">⬇ Exportar CSV</button>
-        <button class="btn-accion" onclick="window.print()">🖨️ Imprimir</button>
+        <button class="btn-accion" onclick="descargarCSV()">Exportar CSV</button>
+        <button class="btn-accion" onclick="window.print()">Imprimir</button>
       </div>
     </div>
 
@@ -1403,14 +1344,14 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   <!-- PANEL 2: MAPAS DE CALOR Y DEMANDA POR ESTACION -->
   <div class="panel" id="panelAnalitica">
     <div class="panel-header">
-      <h2 class="panel-title">Planeación — Mapas de Calor y Demanda por Estación</h2>
+      <h2 class="panel-title">Planeación: mapas de calor y demanda por estación</h2>
     </div>
     <div class="kpis-estacion" id="kpisEstacion">
-      <div class="kpi-card"><div class="valor" id="kpiVuelos">{d0['vuelos_prom']}</div><div class="etiqueta">Vuelos / Día (Prom.)</div></div>
-      <div class="kpi-card"><div class="valor" id="kpiCheckin">{d0['checkin_prom']}</div><div class="etiqueta">Personal Check-in (Prom.)</div></div>
-      <div class="kpi-card"><div class="valor" id="kpiGate">{d0['gate_prom']}</div><div class="etiqueta">Personal Gate (Prom.)</div></div>
-      <div class="kpi-card"><div class="valor" id="kpiTotal">{d0['total_prom']}</div><div class="etiqueta">Total Personal (Prom.)</div></div>
-      <div class="kpi-card"><div class="valor" id="kpiPico">{d0['total_pico']}</div><div class="etiqueta">Total Personal (Día Pico)</div></div>
+      <div class="kpi-card"><div class="valor" id="kpiVuelos">{d0['vuelos_prom']}</div><div class="etiqueta">Vuelos por día (prom.)</div></div>
+      <div class="kpi-card"><div class="valor" id="kpiCheckin">{d0['checkin_prom']}</div><div class="etiqueta">Personal de check-in (prom.)</div></div>
+      <div class="kpi-card"><div class="valor" id="kpiGate">{d0['gate_prom']}</div><div class="etiqueta">Personal de gate (prom.)</div></div>
+      <div class="kpi-card"><div class="valor" id="kpiTotal">{d0['total_prom']}</div><div class="etiqueta">Personal total (prom.)</div></div>
+      <div class="kpi-card"><div class="valor" id="kpiPico">{d0['total_pico']}</div><div class="etiqueta">Personal total (día pico)</div></div>
     </div>
 
     {grafico_html}
@@ -1419,19 +1360,19 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
   <!-- PANEL 3: RESUMEN DE RED -->
   <div class="panel" id="panelResumen">
     <div class="panel-header">
-      <h2 class="panel-title">Resumen General por Estación (Toda la Red)</h2>
-      <input type="text" id="buscadorEstacion" class="input-busqueda" placeholder="🔍 Filtrar estación (ej. BOG, MTR)..." oninput="filtrarTablaResumen(this.value)">
+      <h2 class="panel-title">Resumen por estación</h2>
+      <input type="text" id="buscadorEstacion" class="input-busqueda" placeholder="Filtrar por código de estación" oninput="filtrarTablaResumen(this.value)">
     </div>
     <div class="tabla-scroll">
       <table class="resumen" id="tablaResumenRed">
         <thead>
           <tr>
             <th>Estación</th>
-            <th>Vuelos / Día (Prom.)</th>
-            <th>Check-in (Prom.)</th>
-            <th>Gate (Prom.)</th>
-            <th>Total (Prom.)</th>
-            <th>Total (Día Pico)</th>
+            <th>Vuelos por día (prom.)</th>
+            <th>Check-in (prom.)</th>
+            <th>Gate (prom.)</th>
+            <th>Total (prom.)</th>
+            <th>Total (día pico)</th>
           </tr>
         </thead>
         <tbody>
@@ -1440,7 +1381,7 @@ def generar_dashboard_html(df_resumen: pd.DataFrame, vuelos: pd.DataFrame,
       </table>
     </div>
     <p class="notas" style="margin-top:12px;margin-bottom:0">
-      💡 <b>Tip:</b> Haz clic sobre cualquier fila de la tabla para cargar automáticamente esa estación en el programador de turnos y en las gráficas. Los promedios están redondeados hacia arriba.
+      Haz clic sobre cualquier fila de la tabla para cargar automáticamente esa estación en el programador de turnos y en las gráficas. Los promedios están redondeados hacia arriba.
     </p>
   </div>
 </section>
@@ -1474,7 +1415,7 @@ function alternarTema() {{
   const actual = root.getAttribute('data-theme') || 'light';
   const nuevo = actual === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', nuevo);
-  document.getElementById('btnTema').textContent = nuevo === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+  document.getElementById('btnTema').textContent = nuevo === 'dark' ? 'Modo claro' : 'Modo oscuro';
   localStorage.setItem('temaDashboardTurnos', nuevo);
 
   const colorTexto = nuevo === 'dark' ? '#cbd5e1' : '#334155';
@@ -1584,7 +1525,7 @@ function actualizarVistaFecha() {{
   const fObj = new Date(fechaISO + 'T00:00:00');
   const idxDia = (fObj.getDay() + 6) % 7;
   const esCritico = (fechaISO === d.fecha_critica && modoFecha === 'dia');
-  lblDia.innerHTML = `${{DIAS_SEMANA_JS[idxDia]}} · ${{fechaISO}} ${{esCritico ? '🔥 (Día Pico)' : ''}}`;
+  lblDia.innerHTML = `${{DIAS_SEMANA_JS[idxDia]}} · ${{fechaISO}} ${{esCritico ? '(día pico)' : ''}}`;
 
   if (modoFecha === 'dia') {{
     const info = d.diario[fechaISO];
@@ -1595,10 +1536,10 @@ function actualizarVistaFecha() {{
     }}
     cont.innerHTML = `
       <div class="kpis-estacion">
-        <div class="kpi-card"><div class="valor">${{info.vuelos}}</div><div class="etiqueta">Vuelos del Día</div></div>
-        <div class="kpi-card"><div class="valor" style="color:var(--blue)">${{info.checkin}}</div><div class="etiqueta">Turnos Check-in (8h)</div></div>
-        <div class="kpi-card"><div class="valor" style="color:var(--orange)">${{info.gate}}</div><div class="etiqueta">Turnos Gate (8h)</div></div>
-        <div class="kpi-card"><div class="valor">${{info.total}}</div><div class="etiqueta">Total Personal Requerido</div></div>
+        <div class="kpi-card"><div class="valor">${{info.vuelos}}</div><div class="etiqueta">Vuelos del día</div></div>
+        <div class="kpi-card"><div class="valor" style="color:var(--blue)">${{info.checkin}}</div><div class="etiqueta">Turnos de check-in (8 h)</div></div>
+        <div class="kpi-card"><div class="valor" style="color:var(--orange)">${{info.gate}}</div><div class="etiqueta">Turnos de gate (8 h)</div></div>
+        <div class="kpi-card"><div class="valor">${{info.total}}</div><div class="etiqueta">Personal total requerido</div></div>
       </div>
       <div id="ganttDia"></div>
       <div class="turnos-grid">
@@ -1734,14 +1675,14 @@ function descargarCSV() {{
 
 function dibujarGantt(contenedorId, info) {{
   const filas = [];
-  info.ventanas_checkin.forEach(v => filas.push({{...v, seccion: 'CHECK-IN', grupo: '✈ Vuelo ' + v.vuelo, clase: 'barra-vuelo-checkin'}}));
+  info.ventanas_checkin.forEach(v => filas.push({{...v, seccion: 'CHECK-IN', grupo: 'Vuelo ' + v.vuelo, clase: 'barra-vuelo-checkin'}}));
   info.turnos_checkin_raw.forEach((t, i) => filas.push({{
     inicio: t.entrada, fin: t.salida, vuelo: 'T' + (i + 1) + ' (' + t.utilizacion + '%): ' + t.vuelos.join(', '),
-    seccion: 'CHECK-IN', grupo: '👤 Turno Check-in ' + (i + 1), clase: 'barra-turno-checkin'}}));
-  info.ventanas_gate.forEach(v => filas.push({{...v, seccion: 'GATE / SALAS', grupo: '✈ Vuelo ' + v.vuelo, clase: 'barra-vuelo-gate'}}));
+    seccion: 'CHECK-IN', grupo: 'Turno check-in ' + (i + 1), clase: 'barra-turno-checkin'}}));
+  info.ventanas_gate.forEach(v => filas.push({{...v, seccion: 'GATE / SALAS', grupo: 'Vuelo ' + v.vuelo, clase: 'barra-vuelo-gate'}}));
   info.turnos_gate_raw.forEach((t, i) => filas.push({{
     inicio: t.entrada, fin: t.salida, vuelo: 'T' + (i + 1) + ' (' + t.utilizacion + '%): ' + t.vuelos.join(', '),
-    seccion: 'GATE / SALAS', grupo: '👤 Turno Gate ' + (i + 1), clase: 'barra-turno-gate'}}));
+    seccion: 'GATE / SALAS', grupo: 'Turno gate ' + (i + 1), clase: 'barra-turno-gate'}}));
 
   const cont = document.getElementById(contenedorId);
   if (filas.length === 0) {{ cont.innerHTML = ''; return; }}
@@ -1784,12 +1725,12 @@ function dibujarGantt(contenedorId, info) {{
   cont.innerHTML = `
     <div class="gantt-card">
       <div class="gantt-top">
-        <div class="gantt-title">Línea de Tiempo Operativa (Vuelos vs. Turnos de 8h)</div>
+        <div class="gantt-title">Línea de tiempo: vuelos y turnos de 8 h</div>
         <div class="gantt-legend">
-          <span><i class="leg-box" style="background:#60a5fa"></i>Ventana Vuelo Check-in</span>
-          <span><i class="leg-box" style="background:#1d4ed8"></i>Turno Check-in (8h)</span>
-          <span><i class="leg-box" style="background:#fbbf24"></i>Ventana Vuelo Gate</span>
-          <span><i class="leg-box" style="background:#b45309"></i>Turno Gate (8h)</span>
+          <span><i class="leg-box" style="background:#60a5fa"></i>Ventana del vuelo, check-in</span>
+          <span><i class="leg-box" style="background:#1d4ed8"></i>Turno de check-in (8 h)</span>
+          <span><i class="leg-box" style="background:#fbbf24"></i>Ventana del vuelo, gate</span>
+          <span><i class="leg-box" style="background:#b45309"></i>Turno de gate (8 h)</span>
         </div>
       </div>
       <div class="gantt"><div class="gantt-horas">${{horas.join('')}}</div>${{filasHtml}}</div>
