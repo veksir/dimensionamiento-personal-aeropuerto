@@ -101,3 +101,7 @@ README.md                 Este archivo.
 - Los artefactos de compilación (`build/`, `dist/`, `.spec`, `.exe`, `.rar`) y
   los archivos de datos (`*.xlsx`, `*.csv`) están excluidos del control de
   versiones mediante `.gitignore`.
+
+## Licencia
+
+Copyright (c) 2026 Kevyn Sena. Todos los derechos reservados. El código se publica para consulta; para cualquier otro uso, escríbeme.
